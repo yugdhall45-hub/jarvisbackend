@@ -1,22 +1,19 @@
-# Jarvis AI Backend
+# Jarvis Groq Backend
 
-## Deploy on Render
-1. Extract this ZIP.
-2. Upload the files inside `Jarvis_Python_Backend` to a GitHub repository.
-3. In Render, create a **New Web Service** and connect that repository.
-4. Build command: `pip install -r requirements.txt`
-5. Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-6. In Render → Environment, add `OPENAI_API_KEY` with your secret API key.
-7. Optional: set `OPENAI_MODEL` to `gpt-4.1-mini` if your API account has access.
-8. Deploy, then open `/health` on your Render URL. Expected: `{"status":"ok"}`.
-9. Open `/docs` to test `POST /chat`.
+## Deploy/update on Render
+1. Open your existing GitHub repository connected to Render.
+2. Replace its `main.py` with this `main.py`; keep `requirements.txt` (it is also included here).
+3. Commit the changes to GitHub. Render should redeploy automatically.
+4. Open Render → your `jarvisbackend` service → Environment.
+5. Add `GROQ_API_KEY` with the secret key created at https://console.groq.com/keys .
+6. Add `GROQ_MODEL` = `llama-3.3-70b-versatile` (if this model is available in your Groq account).
+7. Remove `OPENAI_API_KEY` if you previously added it; this code does not use it.
+8. Save changes and wait for deployment.
 
-Example request body: `{"message":"Hello Jarvis"}`
+## Test
+- `GET /health` should return `{"status":"ok"}`.
+- Open `/docs`, expand `POST /chat`, click **Try it out**, and send:
+  `{"message":"Hello Jarvis, introduce yourself"}`
 
-## Security
-Never put your real API key in this code, Android app, or public GitHub repository.
-API usage may be billed separately from a ChatGPT subscription. Add authentication and
-rate limiting before exposing this endpoint publicly beyond testing.
-
-This backend returns AI replies only. Your Android app still needs to send recognized
-speech text to `POST /chat`.
+## Important
+Keep `GROQ_API_KEY` private. Set it only in Render Environment variables; never put it in Android code or public GitHub. Free-tier limits and model availability may change. This backend returns AI text only; the Android app still needs to send recognized speech to `/chat`.
